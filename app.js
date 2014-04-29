@@ -5,6 +5,9 @@ var config = require('config');
 var express = require('express');
 var RasterizerService = require('./lib/rasterizerService');
 var FileCleanerService = require('./lib/fileCleanerService');
+var phantomjs = require('phantomjs');
+
+config.path = phantomjs.path;
 
 process.on('uncaughtException', function (err) {
   console.error("[uncaughtException]", err);
