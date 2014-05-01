@@ -5,9 +5,8 @@ var config = require('config');
 var express = require('express');
 var RasterizerService = require('./lib/rasterizerService');
 var FileCleanerService = require('./lib/fileCleanerService');
-var phantomjs = require('phantomjs');
 
-config.path = phantomjs.path;
+console.log(JSON.stringify(config));
 
 process.on('uncaughtException', function (err) {
   console.error("[uncaughtException]", err);
@@ -34,5 +33,8 @@ app.configure('development', function() {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 require('./routes')(app, config.server.useCors);
-app.listen(process.env.PORT);
-console.log('Express server listening on port ' + config.server.port);
+
+var port = process.env.PORT || config.server.port;
+
+app.listen(port);
+console.log('Express server listening on port ' + port);
