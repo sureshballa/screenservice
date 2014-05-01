@@ -2,6 +2,26 @@
 
 A simple screenshot web service powered by [Express](http://expressjs.com) and [PhantomJS](http://www.phantomjs.org/). Forked from [screenshot-app](http://github.com/visionmedia/screenshot-app) and [screenshot-as-service] (https://github.com/fzaninotto/screenshot-as-a-service)
 
+## What is new (from me Suresh Balla)
+
+Docker support added with Dockerfile
+
+Use following command to build and run this service within docker container. Doing this way, you do not need to follow any setup instruction mentioned below.
+
+Build the docker container:
+
+
+```
+$ docker build -t <username>/<imagename> .
+```
+
+Run the container:
+
+```
+$ docker run -d -p 8080:8080 <username>/<imagename>
+```
+
+
 ## Setup
 
 First [install](http://code.google.com/p/phantomjs/wiki/Installation) phantomjs, then clone this repo and install the deps:
