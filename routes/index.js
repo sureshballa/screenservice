@@ -92,7 +92,9 @@ module.exports = function(app, useCors) {
       fileCleanerService.addFile(imagePath);
     });
     fileStream.on('error', function(err){
-      console.log('Error while reading file: %s', err.message);
+      if(err){
+        console.log('Error while reading file: %s', err.message);
+      }
       callback(err);
     });
     fileStream.pipe(request.post(url, function(err) {

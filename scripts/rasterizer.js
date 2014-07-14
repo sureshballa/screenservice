@@ -83,7 +83,9 @@ service = server.listen(port, function(request, response) {
     }
   } catch (err) {
     response.statusCode = 500;
-    response.write('Error while parsing headers: ' + err.message);
+    if(err){
+      response.write('Error while parsing headers: ' + err.message);
+    }
     return response.close();
   }
   page.open(url, function(status) {
