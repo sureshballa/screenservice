@@ -36,5 +36,8 @@ require('./routes')(app, config.server.useCors);
 
 var port = process.env.PORT || config.server.port;
 
-app.listen(port);
+var server = app.listen(port);
+//default is 2 mins, increasing to 2 and 1/2 mins
+server.timeout = 150000;
+
 console.log('Express server listening on port ' + port);

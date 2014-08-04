@@ -89,13 +89,54 @@ service = server.listen(port, function(request, response) {
     return response.close();
   }
   page.open(url, function(status) {
-    if (status == 'success') {
-      window.setTimeout(function () {
-        page.render(path);
-        response.write('Success: Screenshot saved to ' + path + "\n");
-        page.release();
-        response.close();
-      }, delay);
+    if (status == 'success') {   
+    	if(typeof request.headers.complete !== "undefined"){
+    		var noOfCheck = 0; //max to 40 which is 40*3000 = 2 mins
+    		console.log('complete header found');
+    		
+    		var interval = window.setInterval(function (){
+    			if(noOfCheck >= 40){
+    				//Break waiting and render
+    				console.log('Timeout waiting for complete element in the DOM');
+    				page.render(path);
+			        response.write('Success: Screenshot saved to ' + path + "\n");
+			        page.release();
+			        response.close();
+			        window.clearInterval(interval);
+    			}
+    			else{
+    				var elementId = request.headers.complete;
+    				var completeElementFound = page.evaluate(function (elementId){
+    					return document.getElementById(elementId) !== null ;
+    				}, elementId);
+    				
+    				if(completeElementFound){
+    					console.log('complete header found and element also found');
+    					page.render(path);
+    			        response.write('Success: Screenshot saved to ' + path + "\n");
+    			        page.release();
+    			        response.close();
+    			        window.clearInterval(interval);
+    				}
+    				else{
+    					console.log('complete element not found, will check again');
+    				}
+    				
+    				noOfCheck++;
+    				
+    			}
+    		}, 3000)
+    	}
+    	else{
+    		console.log('complete header not found');
+	      window.setTimeout(function () {
+	        page.render(path);
+	        response.write('Success: Screenshot saved to ' + path + "\n");
+	        page.release();
+	        response.close();
+	      }, delay);
+		}
+    	
     } else {
       response.write('Error: Url returned status ' + status + "\n");
       page.release();
