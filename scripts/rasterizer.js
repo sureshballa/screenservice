@@ -112,6 +112,27 @@ service = server.listen(port, function(request, response) {
     				
     				if(completeElementFound){
     					console.log('complete header found and element also found');
+    					
+    					if(typeof request.headers.elementId !== "undefined"){  
+    						  var boundingClipRect = page.evaluate(function (elementId) {
+    							  	if(document.getElementById(elementId) !== null){
+    							  		return document.getElementById(elementId).getBoundingClientRect();
+    							  	}
+    							  	else{
+    							  		return null;
+    							  	}
+    					        }, request.headers.elementId);
+    						  
+    						  if(boundingClipRect !== null){
+    							  page.clipRect = {
+    							            top:    boundingClipRect.top,
+    							            left:   boundingClipRect.left,
+    							            width:  boundingClipRect.width,
+    							            height: boundingClipRect.height
+    							        };
+    						  }
+    				    	}
+    					
     					page.render(path);
     			        response.write('Success: Screenshot saved to ' + path + "\n");
     			        page.release();
@@ -130,6 +151,27 @@ service = server.listen(port, function(request, response) {
     	else{
     		console.log('complete header not found');
 	      window.setTimeout(function () {
+	    	
+	    	if(typeof request.headers.elementId !== "undefined"){  
+			  var boundingClipRect = page.evaluate(function (elementId) {
+				  	if(document.getElementById(elementId) !== null){
+				  		return document.getElementById(elementId).getBoundingClientRect();
+				  	}
+				  	else{
+				  		return null;
+				  	}
+		        }, request.headers.elementId);
+			  
+			  if(boundingClipRect !== null){
+				  page.clipRect = {
+				            top:    boundingClipRect.top,
+				            left:   boundingClipRect.left,
+				            width:  boundingClipRect.width,
+				            height: boundingClipRect.height
+				        };
+			  }
+	    	}
+	    	  
 	        page.render(path);
 	        response.write('Success: Screenshot saved to ' + path + "\n");
 	        page.release();
