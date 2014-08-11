@@ -106,6 +106,7 @@ service = server.listen(port, function(request, response) {
     			}
     			else{
     				var elementId = request.headers.complete;
+    				console.log("Completed id: " + elementId);
     				var completeElementFound = page.evaluate(function (elementId){
     					return document.getElementById(elementId) !== null ;
     				}, elementId);
@@ -113,7 +114,7 @@ service = server.listen(port, function(request, response) {
     				if(completeElementFound){
     					console.log('complete header found and element also found');
     					
-    					if(typeof request.headers.elementId !== "undefined"){  
+    					if(typeof request.headers.selector !== "undefined"){  
     						  var boundingClipRect = page.evaluate(function (elementId) {
     							  	if(document.getElementById(elementId) !== null){
     							  		return document.getElementById(elementId).getBoundingClientRect();
@@ -121,7 +122,7 @@ service = server.listen(port, function(request, response) {
     							  	else{
     							  		return null;
     							  	}
-    					        }, request.headers.elementId);
+    					        }, request.headers.selector.substring(1));	//remove # prefix for selector
     						  
     						  if(boundingClipRect !== null){
     							  page.clipRect = {
@@ -152,7 +153,7 @@ service = server.listen(port, function(request, response) {
     		console.log('complete header not found');
 	      window.setTimeout(function () {
 	    	
-	    	if(typeof request.headers.elementId !== "undefined"){  
+	    	if(typeof request.headers.selector !== "undefined"){  
 			  var boundingClipRect = page.evaluate(function (elementId) {
 				  	if(document.getElementById(elementId) !== null){
 				  		return document.getElementById(elementId).getBoundingClientRect();
@@ -160,7 +161,7 @@ service = server.listen(port, function(request, response) {
 				  	else{
 				  		return null;
 				  	}
-		        }, request.headers.elementId);
+		        }, request.headers.selector.substring(1));	//remove # prefix for selector
 			  
 			  if(boundingClipRect !== null){
 				  page.clipRect = {
